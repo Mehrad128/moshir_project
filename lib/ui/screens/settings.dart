@@ -20,7 +20,7 @@ class SettingsScreenState extends State<SettingsPage> {
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     // final backgroundColor = isDarkMode ? Colors.black : Colors.white;
     final textColor = isDarkMode ? Colors.white : Colors.black;
-    
+
     return Scaffold(
       backgroundColor: isDarkMode ? Colors.black : Colors.white,
       body: SafeArea(
@@ -30,18 +30,22 @@ class SettingsScreenState extends State<SettingsPage> {
             child: Column(
               children: [
                 const Header(),
-                
+
                 const SizedBox(height: 40),
-                
+
                 // ✅ کارت تنظیم تم
                 Container(
                   width: double.infinity,
                   padding: const EdgeInsets.all(20),
                   decoration: BoxDecoration(
-                    color: isDarkMode ? const Color(0xFF1C1C1E) : Colors.grey.shade50,
+                    color: isDarkMode
+                        ? const Color(0xFF1C1C1E)
+                        : Colors.grey.shade50,
                     borderRadius: BorderRadius.circular(16),
                     border: Border.all(
-                      color: isDarkMode ? Colors.grey.shade800 : Colors.grey.shade200,
+                      color: isDarkMode
+                          ? Colors.grey.shade800
+                          : Colors.grey.shade200,
                       width: 1,
                     ),
                   ),
@@ -72,7 +76,9 @@ class SettingsScreenState extends State<SettingsPage> {
                         textAlign: TextAlign.justify,
                         style: TextStyle(
                           fontSize: 14,
-                          color: isDarkMode ? Colors.grey.shade400 : Colors.grey.shade700,
+                          color: isDarkMode
+                              ? Colors.grey.shade400
+                              : Colors.grey.shade700,
                           height: 1.5,
                         ),
                       ),
@@ -87,7 +93,9 @@ class SettingsScreenState extends State<SettingsPage> {
                           ),
                           label: Text(isDarkMode ? "تم روشن" : "تم تاریک"),
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: isDarkMode ? Colors.orange : Colors.blue,
+                            backgroundColor: isDarkMode
+                                ? Colors.orange
+                                : Colors.blue,
                             foregroundColor: Colors.white,
                             padding: const EdgeInsets.symmetric(
                               horizontal: 30,
@@ -102,9 +110,9 @@ class SettingsScreenState extends State<SettingsPage> {
                     ],
                   ),
                 ),
-                
+
                 const SizedBox(height: 30),
-                
+
                 // ✅ کارت تنظیم درصد تکمیل پروفایل
                 Consumer<SettingsProvider>(
                   builder: (context, settings, child) {
@@ -112,10 +120,14 @@ class SettingsScreenState extends State<SettingsPage> {
                       width: double.infinity,
                       padding: const EdgeInsets.all(20),
                       decoration: BoxDecoration(
-                        color: isDarkMode ? const Color(0xFF1C1C1E) : Colors.grey.shade50,
+                        color: isDarkMode
+                            ? const Color(0xFF1C1C1E)
+                            : Colors.grey.shade50,
                         borderRadius: BorderRadius.circular(16),
                         border: Border.all(
-                          color: isDarkMode ? Colors.grey.shade800 : Colors.grey.shade200,
+                          color: isDarkMode
+                              ? Colors.grey.shade800
+                              : Colors.grey.shade200,
                           width: 1,
                         ),
                       ),
@@ -124,10 +136,7 @@ class SettingsScreenState extends State<SettingsPage> {
                         children: [
                           Row(
                             children: [
-                              Icon(
-                                Icons.percent,
-                                color: Colors.green,
-                              ),
+                              Icon(Icons.percent, color: Colors.green),
                               const SizedBox(width: 12),
                               Text(
                                 'درصد تکمیل پروفایل',
@@ -140,7 +149,7 @@ class SettingsScreenState extends State<SettingsPage> {
                             ],
                           ),
                           const SizedBox(height: 20),
-                          
+
                           // نمایش درصد فعلی
                           Container(
                             padding: const EdgeInsets.all(16),
@@ -179,19 +188,21 @@ class SettingsScreenState extends State<SettingsPage> {
                               ],
                             ),
                           ),
-                          
+
                           const SizedBox(height: 30),
-                          
+
                           // اسلایدر
                           Text(
                             'تنظیم درصد:',
                             style: TextStyle(
                               fontSize: 14,
-                              color: isDarkMode ? Colors.grey.shade400 : Colors.grey.shade700,
+                              color: isDarkMode
+                                  ? Colors.grey.shade400
+                                  : Colors.grey.shade700,
                             ),
                           ),
                           const SizedBox(height: 8),
-                          
+
                           SliderTheme(
                             data: SliderThemeData(
                               activeTrackColor: Colors.green,
@@ -206,15 +217,16 @@ class SettingsScreenState extends State<SettingsPage> {
                               min: 0,
                               max: 1,
                               divisions: 100,
-                              label: '${(settings.profileCompletion * 100).toStringAsFixed(0)}%',
+                              label:
+                                  '${(settings.profileCompletion * 100).toStringAsFixed(0)}%',
                               onChanged: (value) {
                                 settings.profileCompletion = value;
                               },
                             ),
                           ),
-                          
+
                           const SizedBox(height: 20),
-                          
+
                           // دکمه‌های سریع
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -229,12 +241,6 @@ class SettingsScreenState extends State<SettingsPage> {
                                 context: context,
                                 label: '۵۰%',
                                 value: 0.50,
-                                isDarkMode: isDarkMode,
-                              ),
-                              _buildQuickButton(
-                                context: context,
-                                label: '۷۵%',
-                                value: 0.75,
                                 isDarkMode: isDarkMode,
                               ),
                               _buildQuickButton(
@@ -256,7 +262,7 @@ class SettingsScreenState extends State<SettingsPage> {
                     );
                   },
                 ),
-                
+
                 const SizedBox(height: 30),
               ],
             ),
@@ -278,20 +284,17 @@ class SettingsScreenState extends State<SettingsPage> {
         context.read<SettingsProvider>().profileCompletion = value;
       },
       style: ElevatedButton.styleFrom(
-        backgroundColor: isDarkMode ? Colors.grey.shade800 : Colors.grey.shade200,
+        backgroundColor: isDarkMode
+            ? Colors.grey.shade800
+            : Colors.grey.shade200,
         foregroundColor: isDarkMode ? Colors.white : Colors.black,
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         elevation: 0,
       ),
       child: Text(
         label,
-        style: const TextStyle(
-          fontSize: 13,
-          fontWeight: FontWeight.w500,
-        ),
+        style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w500),
       ),
     );
   }
@@ -304,7 +307,7 @@ class Header extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
-    
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
