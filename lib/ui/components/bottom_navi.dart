@@ -3,6 +3,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:moshir_ui/ui/home/home.dart';
 import 'package:moshir_ui/ui/screens/calendar.dart';
 import 'package:moshir_ui/ui/screens/history.dart';
+import 'package:moshir_ui/ui/screens/notifications.dart';
 import 'package:moshir_ui/ui/screens/user_profile.dart';
 
 class BottomNaviState extends StatelessWidget {
@@ -62,7 +63,12 @@ class BottomNaviState extends StatelessWidget {
             waitDuration: Duration(milliseconds: 1),
             child: IconButton(
               icon: SvgPicture.asset("assets/images/Notification.svg"),
-              onPressed: () {},
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => NotificationsPage()),
+                );
+              },
             ),
           ),
           Tooltip(
