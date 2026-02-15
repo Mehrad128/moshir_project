@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:moshir_ui/main.dart';
+import 'package:moshir_ui/ui/components/bottom_navi.dart';
 import 'package:moshir_ui/ui/home/home.dart';
 import 'package:moshir_ui/ui/screens/settings.dart';
 import 'package:moshir_ui/ui/screens/user_profile.dart';
@@ -76,6 +77,7 @@ class _HistoryPageState extends State<HistoryPage> {
           ),
         ),
       ),
+      bottomNavigationBar: BottomNaviState(),
     );
   }
 

@@ -24,7 +24,7 @@ class HomePage extends StatelessWidget {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      SvgPicture.asset('assets/images/Logo_light.svg'),
+                      SvgPicture.asset('assets/images/Logo.svg'),
                       SizedBox(height: 18),
                       Text(
                         "Moshir Home Page",

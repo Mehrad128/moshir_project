@@ -25,7 +25,7 @@ class SettingsScreenState extends State<SettingsPage> {
       backgroundColor: isDarkMode ? Colors.black : Colors.white,
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(30, 30, 30, 0),
+          padding: const EdgeInsets.fromLTRB(20, 30, 20, 0),
           child: SingleChildScrollView(
             child: Column(
               children: [

@@ -754,7 +754,7 @@ class TelegramStartButton extends StatelessWidget {
   }
 }
 
-// ============== Reports Modal Popup ==============
+// ============== iOS Style Reports Modal Popup ==============
 class ReportsModalPopup {
   static void show(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
@@ -767,8 +767,10 @@ class ReportsModalPopup {
           decoration: BoxDecoration(
             color: isDark ? const Color(0xFF1C1C1E) : Colors.white,
             borderRadius: const BorderRadius.only(
-              topLeft: Radius.circular(52),
-              topRight: Radius.circular(52),
+              topLeft: Radius.circular(60),
+              topRight: Radius.circular(60),
+              bottomLeft: Radius.circular(20),
+              bottomRight: Radius.circular(20),
             ),
           ),
           child: Padding(
@@ -777,95 +779,97 @@ class ReportsModalPopup {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  // Center(
-                  //   child: Container(
-                  //     margin: const EdgeInsets.only(top: 12, bottom: 8),
-                  //     width: 40,
-                  //     height: 5,
-                  //     decoration: BoxDecoration(
-                  //       color: isDark ? Colors.grey.shade600 : Colors.grey.shade300,
-                  //       borderRadius: BorderRadius.circular(3),
-                  //     ),
-                  //   ),
-                  // ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Container(
-                        // width: double.infinity,
-                        padding: const EdgeInsets.all(30),
-                        child: Text(
+                  // عنوان
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 20,
+                      vertical: 8,
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
                           'گزارشات',
-                          textAlign: TextAlign.right,
-                          style: Theme.of(context).textTheme.bodyMedium,
+                          style: TextStyle(
+                            fontFamily: 'Vazirmatn',
+                            fontSize: 25,
+                            fontWeight: FontWeight.w700,
+                            color: isDark
+                                ? CupertinoColors.white
+                                : CupertinoColors.black,
+                          ),
                         ),
-                      ),
-                      Container(
-                        // width: double.infinity,
-                        padding: const EdgeInsets.all(30),
-                        child: GestureDetector(
+                        CupertinoButton(
+                          padding: EdgeInsets.zero,
                           child: Text(
                             'نمایش همه',
-                            textAlign: TextAlign.left,
-                            style: Theme.of(context).textTheme.bodySmall,
+                            style: TextStyle(
+                              fontFamily: 'Vazirmatn',
+                              fontSize: 16,
+                              color: CupertinoColors.activeBlue,
+                            ),
                           ),
-                          onTap: () {
+                          onPressed: () {
+                            Navigator.pop(context);
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => HistoryPage(),
+                                builder: (context) => const HistoryPage(),
                               ),
                             );
                           },
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
 
-                  Divider(
-                    height: 1,
-                    thickness: 0.2,
-                    color: isDark ? Colors.grey.shade800 : Colors.grey.shade200,
+                  // خط جداکننده
+                  Container(
+                    height: 0.5,
+                    color: isDark
+                        ? CupertinoColors.separator.darkColor
+                        : CupertinoColors.separator,
                   ),
 
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      _buildReportItem(
-                        context,
-                        title: 'ثبت',
-                        // time: '۷:۳۰ صبح',
-                        isDark: isDark,
-                      ),
-                      _buildReportItem(
-                        context,
-                        title: 'فیش حقوقی',
-                        // date: '۱۲ اردیبهشت',
-                        isDark: isDark,
-                      ),
-                    ],
+                  // آیتم‌ها
+                  _buildMenuItem(
+                    context,
+                    title: 'ثبت',
+                    time: '۷:۳۰ صبح',
+                    icon: CupertinoIcons.pencil,
+                    color: CupertinoColors.activeBlue,
+                    isDark: isDark,
                   ),
 
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      _buildReportItem(
-                        context,
-                        title: 'دریافت',
-                        // time: '۱۰:۴۵ عصر',
-                        isDark: isDark,
-                        showDivider: false,
-                      ),
-                      _buildReportItem(
-                        context,
-                        title: 'الحاقیه',
-                        date: '۲۱ تیر',
-                        isDark: isDark,
-                      ),
-                    ],
+                  _buildMenuItem(
+                    context,
+                    title: 'فیش حقوقی',
+                    date: '۱۲ اردیبهشت',
+                    icon: CupertinoIcons.doc_text,
+                    color: CupertinoColors.activeGreen,
+                    isDark: isDark,
                   ),
 
-                  const SizedBox(height: 60),
+                  _buildMenuItem(
+                    context,
+                    title: 'دریافت',
+                    time: '۱۰:۴۵ عصر',
+                    icon: CupertinoIcons.down_arrow,
+                    color: CupertinoColors.systemPurple,
+                    isDark: isDark,
+                    showDivider: false,
+                  ),
+
+                  _buildMenuItem(
+                    context,
+                    title: 'الحاقیه',
+                    date: '۲۱ تیر',
+                    icon: CupertinoIcons.link,
+                    color: CupertinoColors.systemOrange,
+                    isDark: isDark,
+                  ),
+
+                  const SizedBox(height: 30),
                 ],
               ),
             ),
@@ -875,65 +879,133 @@ class ReportsModalPopup {
     );
   }
 
-  static Widget _buildReportItem(
+  static Widget _buildMenuItem(
     BuildContext context, {
     required String title,
     String? date,
     String? time,
+    required IconData icon,
+    required Color color,
     required bool isDark,
     bool showDivider = true,
   }) {
     return Column(
       children: [
-        Container(
-          // width: double.infinity,
-          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              // زمان یا تاریخ (راست)
-              if (time != null)
-                Text(
-                  time,
-                  style: TextStyle(
-                    fontFamily: 'Vazirmatn',
-                    fontSize: 16,
-                    color: isDark ? Colors.grey.shade400 : Colors.grey.shade600,
+        CupertinoButton(
+          padding: EdgeInsets.zero,
+          onPressed: () {
+            Navigator.pop(context);
+            _showItemDetails(context, title, date ?? time ?? '');
+          },
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
+            child: Row(
+              children: [
+                // آیکون
+                Container(
+                  width: 40,
+                  height: 40,
+                  decoration: BoxDecoration(
+                    color: color.withOpacity(0.1),
+                    borderRadius: BorderRadius.circular(12),
                   ),
+                  child: Icon(icon, color: color, size: 22),
                 ),
-              if (date != null)
-                Text(
-                  date,
-                  style: TextStyle(
-                    fontFamily: 'Vazirmatn',
-                    fontSize: 16,
-                    color: isDark ? Colors.grey.shade400 : Colors.grey.shade600,
+
+                const SizedBox(width: 16),
+
+                // عنوان
+                Expanded(
+                  child: Text(
+                    title,
+                    style: TextStyle(
+                      fontFamily: 'Vazirmatn',
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                      color: isDark
+                          ? CupertinoColors.white
+                          : CupertinoColors.black,
+                    ),
                   ),
                 ),
 
-              // عنوان (چپ)
-              Text(
-                title,
-                style: TextStyle(
-                  fontFamily: 'Vazirmatn',
-                  fontSize: 16,
-                  fontWeight: FontWeight.w500,
-                  color: isDark ? Colors.white : Colors.black,
+                // تاریخ یا زمان
+                if (date != null || time != null)
+                  Text(
+                    date ?? time!,
+                    style: TextStyle(
+                      fontFamily: 'Vazirmatn',
+                      fontSize: 14,
+                      color: isDark
+                          ? CupertinoColors.systemGrey.darkColor
+                          : CupertinoColors.systemGrey,
+                    ),
+                  ),
+
+                const SizedBox(width: 8),
+
+                // شورون
+                Icon(
+                  CupertinoIcons.chevron_forward,
+                  size: 14,
+                  color: isDark
+                      ? CupertinoColors.systemGrey.darkColor
+                      : CupertinoColors.systemGrey,
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
         if (showDivider)
           Padding(
-            padding: const EdgeInsets.only(right: 24),
-            child: Divider(
-              height: 1,
-              thickness: 0.5,
-              color: isDark ? Colors.grey.shade800 : Colors.grey.shade200,
+            padding: const EdgeInsets.only(left: 76),
+            child: Container(
+              height: 0.5,
+              color: isDark
+                  ? CupertinoColors.separator.darkColor
+                  : CupertinoColors.separator,
             ),
           ),
       ],
+    );
+  }
+
+  static void _showItemDetails(
+    BuildContext context,
+    String title,
+    String dateTime,
+  ) {
+    showCupertinoModalPopup(
+      context: context,
+      builder: (context) => CupertinoActionSheet(
+        title: Text(
+          title,
+          style: const TextStyle(
+            fontFamily: 'Vazirmatn',
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        message: Text(
+          'تاریخ: $dateTime\n'
+          'وضعیت: تکمیل شده\n'
+          'کد پیگیری: ۱۲۳۴۵۶۷۸۹',
+          style: const TextStyle(fontFamily: 'Vazirmatn'),
+          textAlign: TextAlign.center,
+        ),
+        actions: [
+          CupertinoActionSheetAction(
+            onPressed: () => Navigator.pop(context),
+            child: const Text(
+              'مشاهده جزئیات',
+              style: TextStyle(fontFamily: 'Vazirmatn'),
+            ),
+          ),
+        ],
+        cancelButton: CupertinoActionSheetAction(
+          onPressed: () => Navigator.pop(context),
+          child: const Text('بستن', style: TextStyle(fontFamily: 'Vazirmatn')),
+        ),
+      ),
     );
   }
 }

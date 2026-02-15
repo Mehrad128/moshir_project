@@ -14,7 +14,8 @@
         "flutter_svg",
         "intl",
         "provider",
-        "shared_preferences"
+        "shared_preferences",
+        "table_calendar"
       ],
       "devDependencies": [
         "flutter_launcher_icons",
@@ -68,6 +69,15 @@
         "stream_channel",
         "test_api",
         "vector_math"
+      ]
+    },
+    {
+      "name": "table_calendar",
+      "version": "3.2.0",
+      "dependencies": [
+        "flutter",
+        "intl",
+        "simple_gesture_detector"
       ]
     },
     {
@@ -609,6 +619,13 @@
       "dependencies": [
         "meta",
         "path"
+      ]
+    },
+    {
+      "name": "simple_gesture_detector",
+      "version": "0.2.1",
+      "dependencies": [
+        "flutter"
       ]
     }
   ],
