@@ -25,7 +25,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     final themeMode = Provider.of<ThemeNotifier>(
       context,
-    ).themeMode; // دریافت وضعیت تم
+    ).themeMode;
 
     return MaterialApp(
       localizationsDelegates: [
@@ -45,9 +45,9 @@ class MyApp extends StatelessWidget {
         primaryColor: Colors.blue,
         scaffoldBackgroundColor: Colors.white,
         bottomNavigationBarTheme: BottomNavigationBarThemeData(
-          backgroundColor: Colors.white, // پس‌زمینه برای تم روشن
-          selectedItemColor: Colors.blue, // رنگ آیکون انتخاب شده
-          unselectedItemColor: Colors.grey, // رنگ آیکون‌های انتخاب نشده
+          backgroundColor: Colors.white,
+          selectedItemColor: Colors.blue,
+          unselectedItemColor: Colors.grey,
         ),
         textTheme: TextTheme(
           headlineSmall: TextStyle(
@@ -114,7 +114,7 @@ class MyApp extends StatelessWidget {
         ),
       ),
       debugShowCheckedModeBanner: false,
-      home: const SplashScreen(), // صفحه تنظیمات به عنوان صفحه اصلی
+      home: const SplashScreen(),
     );
   }
 
