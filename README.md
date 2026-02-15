@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # moshir_ui
 
 A new Flutter project.
@@ -17,3 +18,7 @@ samples, guidance on mobile development, and a full API reference.
 # MoshirUI_Fluter
 # MoshirMe
 # MoshirMe
+=======
+# moshir_project
+Moshir: Smart Recruitment System Application
+>>>>>>> 81d448088562988827ffc24b336341ab4d5b0c81
