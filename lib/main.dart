@@ -9,7 +9,6 @@ import 'package:intl/intl.dart';
 void main() {
   runApp(
     MultiProvider(
-      // ✅ از MultiProvider استفاده کن
       providers: [
         ChangeNotifierProvider(create: (_) => ThemeNotifier()),
         ChangeNotifierProvider(create: (_) => SettingsProvider()),
