@@ -7,7 +7,7 @@ on:
 
 jobs:
   build:
-    name: Build APK
+    name: Build Debug APK
     runs-on: ubuntu-latest
     
     steps:
@@ -25,22 +25,32 @@ jobs:
           channel: 'stable'
           flutter-version: '3.x'
       
+      # ✅ کش کردن dependencies (برای سرعت بیشتر)
+      - name: Cache Flutter dependencies
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.pub-cache
+            .dart_tool
+          key: ${{ runner.os }}-pub-${{ hashFiles('**/pubspec.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-pub-
+      
+      # ✅ پاک کردن کش Gradle (برای رفع خطا)
+      - name: Clean Gradle
+        run: |
+          rm -rf android/.gradle
+          rm -rf build/
+      
       - name: Install dependencies
         run: flutter pub get
       
-      - name: Build Debug APK (قابل نصب روی همه گوشی‌ها)
+      - name: Build Debug APK
         run: flutter build apk --debug
       
-      - name: Build Release APK (نیاز به امضا داره)
-        run: flutter build apk --release --split-per-abi
-      
-      - name: Upload APK artifacts
+      - name: Upload Debug APK
         uses: actions/upload-artifact@v4
         with:
-          name: all-apks
-          path: |
-            build/app/outputs/flutter-apk/app-debug.apk
-            build/app/outputs/flutter-apk/app-armeabi-v7a-release.apk
-            build/app/outputs/flutter-apk/app-arm64-v8a-release.apk
-            build/app/outputs/flutter-apk/app-x86_64-release.apk
+          name: app-debug
+          path: build/app/outputs/flutter-apk/app-debug.apk
           retention-days: 30
