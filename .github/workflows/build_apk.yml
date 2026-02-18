@@ -3,6 +3,8 @@ name: Build Flutter APK
 on:
   push:
     branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
   workflow_dispatch:
 
 jobs:
@@ -11,45 +13,36 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
-      - uses: actions/checkout@v4
-      
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
       - name: Setup Java
         uses: actions/setup-java@v4
         with:
           distribution: 'zulu'
           java-version: '17'
-      
+
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
           channel: 'stable'
           flutter-version: '3.x'
-      
-      # ✅ کش کردن Gradle
-      - name: Cache Gradle
-        uses: actions/cache@v3
-        with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
-          restore-keys: |
-            ${{ runner.os }}-gradle-
-      
-      # ✅ پاک کردن کامل
+          cache: true
+
       - name: Clean project
         run: |
           flutter clean
           rm -rf android/.gradle
+          rm -rf ~/.gradle/caches/
           rm -rf build/
-      
-      - name: Install dependencies
+
+      - name: Get dependencies
         run: flutter pub get
-      
-      - name: Build Debug APK
+
+      - name: Build APK
         run: flutter build apk --debug
-      
-      - name: Upload Debug APK
+
+      - name: Upload APK artifact
         uses: actions/upload-artifact@v4
         with:
           name: app-debug
