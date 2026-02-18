@@ -52,17 +52,21 @@ class _CalendarPageState extends State<CalendarPage> {
               const SizedBox(height: 20),
 
               // کارت تاریخ انتخاب شده
-              SelectedDateCard(selectedDate: selectedDate),
-
-              const SizedBox(height: 24),
-
-              // تقویم
               Expanded(
-                child: _buildCalendar(
-                  context,
-                  isDarkMode,
-                  textColor,
-                  secondaryTextColor,
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      SelectedDateCard(selectedDate: selectedDate),
+                      const SizedBox(height: 24),
+                      // تقویم
+                      _buildCalendar(
+                        context,
+                        isDarkMode,
+                        textColor,
+                        secondaryTextColor,
+                      ),
+                    ],
+                  ),
                 ),
               ),
 

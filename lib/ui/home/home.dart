@@ -478,19 +478,19 @@ class _HomePageState extends State<HomePage> {
             padding: const EdgeInsets.only(bottom: 8),
             child: ElevatedButton.icon(
               onPressed: () async {
-                String? token = await FirebaseService().getSavedToken();
+                // String? token = await FirebaseService().getSavedToken();
 
-                // اگه توکن نال بود، یه توکن جدید بگیر
-                if (token == null) {
-                  token = await FirebaseService().refreshToken();
-                }
+                // // اگه توکن نال بود، یه توکن جدید بگیر
+                // if (token == null) {
+                //   token = await FirebaseService().refreshToken();
+                // }
 
                 showDialog(
                   context: context,
                   builder: (context) => AlertDialog(
                     title: const Text('FCM Token'),
                     content: SelectableText(
-                      token ??
+                      // token ??
                           '❌ توکن وجود نداره\n\nاول Firebase رو مقداردهی کن',
                     ),
                     actions: [
@@ -522,10 +522,10 @@ class _HomePageState extends State<HomePage> {
             // دکمه تست نوتیفیکیشن محلی
             ElevatedButton.icon(
               onPressed: () {
-                NotificationService().showSimpleNotification(
-                  title: 'تست نوتیفیکیشن',
-                  body: 'این یک نوتیفیکیشن آزمایشیه',
-                );
+                // NotificationService().showSimpleNotification(
+                //   title: 'تست نوتیفیکیشن',
+                //   body: 'این یک نوتیفیکیشن آزمایشیه',
+                // );
                 setState(() {
                   _notificationCount++;
                   _hasNewNotification = true;
@@ -547,14 +547,14 @@ class _HomePageState extends State<HomePage> {
                   _hasNewNotification = false;
                 });
 
-                try {
-                  if (PlatformService.isAndroid || PlatformService.isIOS) {
-                    await NotificationService().setBadge(0);
-                  }
-                  await NotificationService().cancelAllNotifications();
-                } catch (e) {
-                  debugPrint('خطا: $e');
-                }
+                // try {
+                //   if (PlatformService.isAndroid || PlatformService.isIOS) {
+                //     await NotificationService().setBadge(0);
+                //   }
+                //   await NotificationService().cancelAllNotifications();
+                // } catch (e) {
+                //   debugPrint('خطا: $e');
+                // }
               },
               icon: const Icon(Icons.clear, size: 16),
               label: const Text('پاک کردن'),

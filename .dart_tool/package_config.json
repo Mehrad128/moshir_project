@@ -152,6 +152,30 @@
       "languageVersion": "2.12"
     },
     {
+      "name": "flutter_badge_manager",
+      "rootUri": "file:///home/voidcipher/.pub-cache/hosted/pub.flutter-io.cn/flutter_badge_manager-0.0.3",
+      "packageUri": "lib/",
+      "languageVersion": "3.6"
+    },
+    {
+      "name": "flutter_badge_manager_android",
+      "rootUri": "file:///home/voidcipher/.pub-cache/hosted/pub.flutter-io.cn/flutter_badge_manager_android-0.0.3",
+      "packageUri": "lib/",
+      "languageVersion": "3.6"
+    },
+    {
+      "name": "flutter_badge_manager_foundation",
+      "rootUri": "file:///home/voidcipher/.pub-cache/hosted/pub.flutter-io.cn/flutter_badge_manager_foundation-0.0.2",
+      "packageUri": "lib/",
+      "languageVersion": "3.6"
+    },
+    {
+      "name": "flutter_badge_manager_platform_interface",
+      "rootUri": "file:///home/voidcipher/.pub-cache/hosted/pub.flutter-io.cn/flutter_badge_manager_platform_interface-0.0.2",
+      "packageUri": "lib/",
+      "languageVersion": "3.6"
+    },
+    {
       "name": "flutter_biometric_auth_plus",
       "rootUri": "file:///home/voidcipher/.pub-cache/hosted/pub.flutter-io.cn/flutter_biometric_auth_plus-0.0.2",
       "packageUri": "lib/",
@@ -171,21 +195,27 @@
     },
     {
       "name": "flutter_local_notifications",
-      "rootUri": "file:///home/voidcipher/.pub-cache/hosted/pub.flutter-io.cn/flutter_local_notifications-16.3.3",
+      "rootUri": "file:///home/voidcipher/.pub-cache/hosted/pub.flutter-io.cn/flutter_local_notifications-21.0.0-dev.1",
       "packageUri": "lib/",
-      "languageVersion": "2.17"
+      "languageVersion": "3.10"
     },
     {
       "name": "flutter_local_notifications_linux",
-      "rootUri": "file:///home/voidcipher/.pub-cache/hosted/pub.flutter-io.cn/flutter_local_notifications_linux-4.0.1",
+      "rootUri": "file:///home/voidcipher/.pub-cache/hosted/pub.flutter-io.cn/flutter_local_notifications_linux-8.0.0-dev.1",
       "packageUri": "lib/",
-      "languageVersion": "2.17"
+      "languageVersion": "3.10"
     },
     {
       "name": "flutter_local_notifications_platform_interface",
-      "rootUri": "file:///home/voidcipher/.pub-cache/hosted/pub.flutter-io.cn/flutter_local_notifications_platform_interface-7.2.0",
+      "rootUri": "file:///home/voidcipher/.pub-cache/hosted/pub.flutter-io.cn/flutter_local_notifications_platform_interface-11.0.0-dev.1",
       "packageUri": "lib/",
-      "languageVersion": "2.17"
+      "languageVersion": "3.10"
+    },
+    {
+      "name": "flutter_local_notifications_windows",
+      "rootUri": "file:///home/voidcipher/.pub-cache/hosted/pub.flutter-io.cn/flutter_local_notifications_windows-3.0.0-dev.1",
+      "packageUri": "lib/",
+      "languageVersion": "3.10"
     },
     {
       "name": "flutter_localizations",
@@ -195,7 +225,7 @@
     },
     {
       "name": "flutter_platform_widgets",
-      "rootUri": "file:///home/voidcipher/.pub-cache/hosted/pub.flutter-io.cn/flutter_platform_widgets-9.0.0",
+      "rootUri": "file:///home/voidcipher/.pub-cache/hosted/pub.flutter-io.cn/flutter_platform_widgets-10.0.1",
       "packageUri": "lib/",
       "languageVersion": "3.8"
     },
@@ -591,9 +621,9 @@
     },
     {
       "name": "timezone",
-      "rootUri": "file:///home/voidcipher/.pub-cache/hosted/pub.flutter-io.cn/timezone-0.9.4",
+      "rootUri": "file:///home/voidcipher/.pub-cache/hosted/pub.flutter-io.cn/timezone-0.11.0",
       "packageUri": "lib/",
-      "languageVersion": "2.19"
+      "languageVersion": "3.10"
     },
     {
       "name": "typed_data",

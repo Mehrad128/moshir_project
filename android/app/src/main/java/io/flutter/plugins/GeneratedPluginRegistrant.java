@@ -31,6 +31,11 @@ public final class GeneratedPluginRegistrant {
       Log.e(TAG, "Error registering plugin flutter_app_badger, fr.g123k.flutterappbadger.FlutterAppBadgerPlugin", e);
     }
     try {
+      flutterEngine.getPlugins().add(new flutter.plugins.flutterbadgemanager.FlutterBadgeManagerPlugin());
+    } catch (Exception e) {
+      Log.e(TAG, "Error registering plugin flutter_badge_manager_android, flutter.plugins.flutterbadgemanager.FlutterBadgeManagerPlugin", e);
+    }
+    try {
       flutterEngine.getPlugins().add(new com.dexterous.flutterlocalnotifications.FlutterLocalNotificationsPlugin());
     } catch (Exception e) {
       Log.e(TAG, "Error registering plugin flutter_local_notifications, com.dexterous.flutterlocalnotifications.FlutterLocalNotificationsPlugin", e);
