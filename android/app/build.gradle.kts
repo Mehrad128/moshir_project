@@ -7,7 +7,7 @@ plugins {
 
 android {
     namespace = "com.example.moshir_ui"
-    compileSdk = 34  // عدد ثابت بگذار
+    compileSdk = 34
     
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
@@ -20,7 +20,7 @@ android {
 
     defaultConfig {
         applicationId = "com.example.moshir_ui"
-        minSdk = 23  // این خیلی مهمه!
+        minSdk = 23
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
@@ -39,6 +39,6 @@ flutter {
 
 dependencies {
     implementation(platform("com.google.firebase:firebase-bom:34.9.0"))
-    implementation("com.google.firebase:firebase-analytics")  // اضافه کن
-    implementation("com.google.firebase:firebase-messaging") // برای نوتیفیکیشن
+    implementation("com.google.firebase:firebase-analytics")
+    implementation("com.google.firebase:firebase-messaging")
 }
