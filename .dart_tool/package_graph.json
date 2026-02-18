@@ -11,7 +11,6 @@
         "firebase_core",
         "firebase_messaging",
         "flutter",
-        "flutter_app_badger",
         "flutter_badge_manager",
         "flutter_biometric_auth_plus",
         "flutter_local_notifications",
@@ -201,13 +200,6 @@
         "firebase_core_web",
         "flutter",
         "meta"
-      ]
-    },
-    {
-      "name": "flutter_app_badger",
-      "version": "1.5.0",
-      "dependencies": [
-        "flutter"
       ]
     },
     {

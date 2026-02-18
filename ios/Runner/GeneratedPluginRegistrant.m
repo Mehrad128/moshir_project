@@ -18,12 +18,6 @@
 @import firebase_messaging;
 #endif
 
-#if __has_include(<flutter_app_badger/FlutterAppBadgerPlugin.h>)
-#import <flutter_app_badger/FlutterAppBadgerPlugin.h>
-#else
-@import flutter_app_badger;
-#endif
-
 #if __has_include(<flutter_badge_manager_foundation/FlutterBadgeManagerPlugin.h>)
 #import <flutter_badge_manager_foundation/FlutterBadgeManagerPlugin.h>
 #else
@@ -59,7 +53,6 @@
 + (void)registerWithRegistry:(NSObject<FlutterPluginRegistry>*)registry {
   [FLTFirebaseCorePlugin registerWithRegistrar:[registry registrarForPlugin:@"FLTFirebaseCorePlugin"]];
   [FLTFirebaseMessagingPlugin registerWithRegistrar:[registry registrarForPlugin:@"FLTFirebaseMessagingPlugin"]];
-  [FlutterAppBadgerPlugin registerWithRegistrar:[registry registrarForPlugin:@"FlutterAppBadgerPlugin"]];
   [FlutterBadgeManagerPlugin registerWithRegistrar:[registry registrarForPlugin:@"FlutterBadgeManagerPlugin"]];
   [FlutterLocalNotificationsPlugin registerWithRegistrar:[registry registrarForPlugin:@"FlutterLocalNotificationsPlugin"]];
   [FlutterSecureStorageDarwinPlugin registerWithRegistrar:[registry registrarForPlugin:@"FlutterSecureStorageDarwinPlugin"]];
