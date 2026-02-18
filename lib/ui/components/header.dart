@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:moshir_ui/main.dart';
+import 'package:moshir_ui/test/test_firebase_page.dart';
 import 'package:moshir_ui/ui/screens/settings.dart';
 import 'package:moshir_ui/ui/screens/user_profile.dart';
 
@@ -54,6 +55,18 @@ class _HeaderMenuButton extends StatelessWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(builder: (context) => SettingsPage()),
+                  );
+                },
+              ),
+              CupertinoActionSheetAction(
+                child: Text(
+                  'Firebase Test BTN',
+                  style: Theme.of(context).textTheme.headlineSmall,
+                ),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => TestFirebasePage()),
                   );
                 },
               ),

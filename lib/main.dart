@@ -1,12 +1,62 @@
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:moshir_ui/services/firebase_service.dart';
+import 'package:moshir_ui/services/notification_service.dart';
+// import 'package:moshir_ui/services/firebase_service.dart';
+// import 'package:moshir_ui/services/platform_service.dart';
 import 'package:moshir_ui/ui/providers/settings_provider.dart';
 import 'package:moshir_ui/ui/splash/splash_screen.dart';
 import 'package:moshir_ui/ui/components/theme_notifier.dart';
+// import 'package:moshir_ui/services/notification_service.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
+// import 'package:timezone/data/latest.dart' as tz;
 
-void main() {
+@pragma('vm:entry-point')
+void notificationTapBackground(NotificationResponse notificationResponse) {
+  // هندلر پس‌زمینه
+  print('نوتیفیکیشن پس‌زمینه: ${notificationResponse.payload}');
+}
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  try {
+    if (kIsWeb) {
+      await Firebase.initializeApp(
+        options: const FirebaseOptions(
+          apiKey: "AIzaSyDLdbc3S7Uplz-dVMNv1Iutm4Rei10WxAE",
+          authDomain: "moshir-bb5ff.firebaseapp.com",
+          projectId: "moshir-bb5ff",
+          storageBucket: "moshir-bb5ff.firebasestorage.app",
+          messagingSenderId: "848364028034",
+          appId: "1:848364028034:web:a0596b73cfafc0a9b9749b",
+        ),
+      );
+    } else {
+      await Firebase.initializeApp();
+    }
+
+    // ✅ اینجا بهترین جا برای onMessage.listen هست
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      print('📨 پیام در foreground دریافت شد');
+      
+      // نمایش نوتیفیکیشن با flutter_local_notifications
+      NotificationService().showSimpleNotification(
+        title: message.notification?.title ?? 'اعلان جدید',
+        body: message.notification?.body ?? '',
+      );
+    });
+
+    print('✅ Firebase روی وب مقداردهی شد');
+  } catch (e) {
+    print('❌ خطا: $e');
+  }
+
   runApp(
     MultiProvider(
       providers: [
@@ -23,20 +73,16 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final themeMode = Provider.of<ThemeNotifier>(
-      context,
-    ).themeMode;
+    final themeMode = Provider.of<ThemeNotifier>(context).themeMode;
 
     return MaterialApp(
-      localizationsDelegates: [
+      localizationsDelegates: const [
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,
       ],
-      supportedLocales: [
+      supportedLocales: const [
         Locale('fa'), // Farsi
-        // Locale('en'), // English
-        // Locale('es'), // Spanish
       ],
       themeMode: themeMode,
       theme: ThemeData(
@@ -44,12 +90,12 @@ class MyApp extends StatelessWidget {
         fontFamily: 'Vazirmatn',
         primaryColor: Colors.blue,
         scaffoldBackgroundColor: Colors.white,
-        bottomNavigationBarTheme: BottomNavigationBarThemeData(
+        bottomNavigationBarTheme: const BottomNavigationBarThemeData(
           backgroundColor: Colors.white,
           selectedItemColor: Colors.blue,
           unselectedItemColor: Colors.grey,
         ),
-        textTheme: TextTheme(
+        textTheme: const TextTheme(
           headlineSmall: TextStyle(
             fontFamily: 'Vazirmatn',
             fontSize: 18,
@@ -87,12 +133,12 @@ class MyApp extends StatelessWidget {
         fontFamily: 'Vazirmatn',
         primaryColor: Colors.orange,
         scaffoldBackgroundColor: Colors.black,
-        bottomNavigationBarTheme: BottomNavigationBarThemeData(
+        bottomNavigationBarTheme: const BottomNavigationBarThemeData(
           backgroundColor: Colors.black,
           selectedItemColor: Colors.orange,
           unselectedItemColor: Colors.grey,
         ),
-        textTheme: TextTheme(
+        textTheme: const TextTheme(
           headlineSmall: TextStyle(
             fontFamily: 'Vazirmatn',
             fontSize: 18,

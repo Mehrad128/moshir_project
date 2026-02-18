@@ -36,3 +36,18 @@
   <script src="flutter_bootstrap.js" async></script>
 </body>
 </html>
+
+<script src="flutter_bootstrap.js" async></script>
+<script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', function () {
+      navigator.serviceWorker.register('firebase-messaging-sw.js', {
+        scope: '/firebase-cloud-messaging-push-scope',
+      }).then(function(registration) {
+        console.log('✅ سرویس‌کارکر FCM ثبت شد');
+      }).catch(function(error) {
+        console.log('❌ خطا در ثبت سرویس‌کارکر FCM:', error);
+      });
+    });
+  }
+</script>

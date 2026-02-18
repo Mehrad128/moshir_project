@@ -3,6 +3,7 @@ import 'package:moshir_ui/ui/home/home.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:moshir_ui/ui/onboarding/onboarding_manager.dart';
 import 'package:moshir_ui/ui/onboarding/onboarding_screen.dart';
+import 'package:moshir_ui/ui/screens/auth_page.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -45,7 +46,7 @@ class _SplashScreenState extends State<SplashScreen> {
     } else {
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => const HomePage()),
+        MaterialPageRoute(builder: (context) => const AuthPage()),
       );
     }
   }
