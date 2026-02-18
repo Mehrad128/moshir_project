@@ -35,7 +35,7 @@ dependencies:
   intl: any
   provider: ^6.1.1
   shared_preferences: ^2.5.4
-  flutter_local_notifications: ^16.3.0
+  flutter_local_notifications: ^21.0.0-dev.1
   flutter_app_badger: ^1.5.0
   firebase_core: ^4.4.0
   firebase_messaging: ^16.1.1
@@ -49,9 +49,10 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.8
   flutter_svg: ^2.2.3
-  flutter_platform_widgets: ^9.0.0
+  flutter_platform_widgets: ^10.0.1
   table_calendar: ^3.2.0
-  timezone: ^0.9.4
+  timezone: ^0.11.0
+  flutter_badge_manager: ^0.0.3
 
 dev_dependencies:
   flutter_test:

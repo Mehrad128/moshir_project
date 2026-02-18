@@ -1,416 +1,212 @@
-import 'dart:convert';
-import 'package:flutter/material.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:flutter_app_badger/flutter_app_badger.dart';
-import 'package:timezone/timezone.dart' as tz;
-import 'package:timezone/data/latest.dart' as tz;
-import 'platform_service.dart';
-import 'package:flutter/foundation.dart' show kIsWeb;
+// import 'dart:convert';
+// import 'package:flutter/material.dart';
+// import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+// import 'package:timezone/timezone.dart' as tz;
+// import 'package:timezone/data/latest.dart' as tz;
+// import 'package:flutter/foundation.dart' show kIsWeb;
+// import 'platform_service.dart';
 
-class NotificationService {
-  static final NotificationService _instance = NotificationService._internal();
-  factory NotificationService() => _instance;
-  NotificationService._internal();
+// class NotificationService {
+//   static final NotificationService _instance = NotificationService._internal();
+//   factory NotificationService() => _instance;
+//   NotificationService._internal();
 
-  final FlutterLocalNotificationsPlugin _localNotifications =
-      FlutterLocalNotificationsPlugin();
+//   final FlutterLocalNotificationsPlugin _flutterLocalNotificationsPlugin =
+//       FlutterLocalNotificationsPlugin();
 
-  // شناسه‌های نوتیفیکیشن
-  int _notificationId = 0;
-  bool _isInitialized = false;
+//   int _notificationId = 0;
+//   bool _isInitialized = false;
 
-  // کانال‌های نوتیفیکیشن
-  static const String _generalChannelId = 'general_channel';
-  static const String _generalChannelName = 'اعلان‌های عمومی';
-  static const String _generalChannelDescription = 'کانال اعلان‌های عمومی';
+//   // کانال‌ها
+//   static const String _generalChannelId = 'general_channel';
+//   static const String _importantChannelId = 'important_channel';
+//   static const String _payrollChannelId = 'payroll_channel';
 
-  static const String _importantChannelId = 'important_channel';
-  static const String _importantChannelName = 'اعلان‌های مهم';
-  static const String _importantChannelDescription = 'کانال اعلان‌های مهم';
+//   Future<void> initialize() async {
+//     if (_isInitialized) return;
+//     if (kIsWeb) return;
 
-  static const String _payrollChannelId = 'payroll_channel';
-  static const String _payrollChannelName = 'اعلان‌های حقوقی';
-  static const String _payrollChannelDescription = 'کانال اعلان‌های حقوقی';
+//     tz.initializeTimeZones();
 
-  // مقداردهی اولیه
-  Future<void> initialize() async {
-    if (_isInitialized) return;
+//     const AndroidInitializationSettings androidSettings =
+//         AndroidInitializationSettings('@mipmap/ic_launcher');
 
-    if (kIsWeb) {
-      // برای وب از Web implementation استفاده کن
-      return;
-    }
+//     const DarwinInitializationSettings iosSettings =
+//         DarwinInitializationSettings(
+//       requestAlertPermission: true,
+//       requestBadgePermission: true,
+//       requestSoundPermission: true,
+//     );
 
-    // مقداردهی اولیه timezone
-    tz.initializeTimeZones();
+//     final LinuxInitializationSettings linuxSettings =
+//         LinuxInitializationSettings(defaultActionName: 'باز کردن');
 
-    // تنظیمات اندروید
-    const AndroidInitializationSettings androidSettings =
-        AndroidInitializationSettings('@mipmap/ic_launcher');
+//     final InitializationSettings settings = InitializationSettings(
+//       android: androidSettings,
+//       iOS: iosSettings,
+//       linux: linuxSettings,
+//     );
 
-    // تنظیمات iOS
-    const DarwinInitializationSettings iosSettings =
-        DarwinInitializationSettings(
-          requestAlertPermission: true,
-          requestBadgePermission: true,
-          requestSoundPermission: true,
-        );
+//     await _flutterLocalNotificationsPlugin.initialize(
+//       settings,
+//       onDidReceiveNotificationResponse: (NotificationResponse response) {
+//         _onNotificationTap(response.payload);
+//       },
+//     );
 
-    // تنظیمات بر اساس پلتفرم
-    late InitializationSettings initSettings;
+//     if (PlatformService.isAndroid) {
+//       await _createChannels();
+//     }
 
-    if (PlatformService.isLinux) {
-      // تنظیمات مخصوص لینوکس
-      LinuxInitializationSettings linuxSettings = LinuxInitializationSettings(
-        defaultActionName: 'باز کردن',
-        // defaultIcon: LinuxNotificationIcon(File('/path/to/icon.png')), // Removed because LinuxNotificationIcon is abstract
-      );
+//     _isInitialized = true;
+//   }
 
-      initSettings = InitializationSettings(
-        android: androidSettings,
-        iOS: iosSettings,
-        linux: linuxSettings,
-      );
-    } else {
-      initSettings = InitializationSettings(
-        android: androidSettings,
-        iOS: iosSettings,
-      );
-    }
+//   Future<void> _createChannels() async {
+//     final androidPlugin = _flutterLocalNotificationsPlugin
+//         .resolvePlatformSpecificImplementation<
+//             AndroidFlutterLocalNotificationsPlugin>();
 
-    await _localNotifications.initialize(
-      initSettings,
-      onDidReceiveNotificationResponse: _onNotificationTap,
-    );
+//     if (androidPlugin == null) return;
 
-    // ایجاد کانال‌های اندروید
-    if (PlatformService.isAndroid) {
-      await _createAndroidChannels();
-    }
+//     final channels = [
+//       AndroidNotificationChannel(
+//         _generalChannelId,
+//         'اعلان‌های عمومی',
+//         description: 'کانال اعلان‌های عمومی',
+//         importance: Importance.high,
+//         enableVibration: true,
+//         playSound: true,
+//       ),
+//       AndroidNotificationChannel(
+//         _importantChannelId,
+//         'اعلان‌های مهم',
+//         description: 'کانال اعلان‌های مهم',
+//         importance: Importance.max,
+//         enableVibration: true,
+//         playSound: true,
+//       ),
+//       AndroidNotificationChannel(
+//         _payrollChannelId,
+//         'اعلان‌های حقوقی',
+//         description: 'کانال اعلان‌های حقوقی',
+//         importance: Importance.max,
+//         enableVibration: true,
+//         playSound: true,
+//       ),
+//     ];
 
-    _isInitialized = true;
-  }
+//     for (var channel in channels) {
+//       await androidPlugin.createNotificationChannel(channel);
+//     }
+//   }
 
-  // ایجاد کانال‌های اندروید
-  Future<void> _createAndroidChannels() async {
-    final androidPlugin = _localNotifications
-        .resolvePlatformSpecificImplementation<
-          AndroidFlutterLocalNotificationsPlugin
-        >();
+//   Future<void> showNotification({
+//     required String title,
+//     required String body,
+//     String? payload,
+//     String channelId = _generalChannelId,
+//     String channelName = 'اعلان‌های عمومی',
+//   }) async {
+//     if (kIsWeb) return;
+//     if (!_isInitialized) await initialize();
 
-    if (androidPlugin == null) return;
+//     _notificationId++;
 
-    const androidGeneralChannel = AndroidNotificationChannel(
-      _generalChannelId,
-      _generalChannelName,
-      description: _generalChannelDescription,
-      importance: Importance.max,
-      enableVibration: true,
-      playSound: true,
-    );
+//     final androidDetails = AndroidNotificationDetails(
+//       channelId,
+//       channelName,
+//       importance: Importance.high,
+//       priority: Priority.high,
+//       playSound: true,
+//       enableVibration: true,
+//     );
 
-    const androidImportantChannel = AndroidNotificationChannel(
-      _importantChannelId,
-      _importantChannelName,
-      description: _importantChannelDescription,
-      importance: Importance.max,
-      enableVibration: true,
-      playSound: true,
-    );
+//     final iosDetails = DarwinNotificationDetails(
+//       presentAlert: true,
+//       presentBadge: true,
+//       presentSound: true,
+//     );
 
-    const androidPayrollChannel = AndroidNotificationChannel(
-      _payrollChannelId,
-      _payrollChannelName,
-      description: _payrollChannelDescription,
-      importance: Importance.max,
-      enableVibration: true,
-      playSound: true,
-    );
+//     final linuxDetails = LinuxNotificationDetails(
+//       urgency: LinuxNotificationUrgency.normal,
+//     );
 
-    await androidPlugin.createNotificationChannel(androidGeneralChannel);
-    await androidPlugin.createNotificationChannel(androidImportantChannel);
-    await androidPlugin.createNotificationChannel(androidPayrollChannel);
-  }
+//     final notificationDetails = NotificationDetails(
+//       android: androidDetails,
+//       iOS: iosDetails,
+//       linux: linuxDetails,
+//     );
 
-  // نمایش نوتیفیکیشن ساده
-  Future<void> showSimpleNotification({
-    required String title,
-    required String body,
-    String? payload,
-    NotificationType type = NotificationType.general,
-  }) async {
-    if (!_isInitialized) await initialize();
+//     await _flutterLocalNotificationsPlugin.show(
+//       _notificationId,
+//       title,
+//       body,
+//       notificationDetails,
+//       payload: payload,
+//     );
+//   }
 
-    _notificationId++;
+//   Future<void> showScheduledNotification({
+//     required String title,
+//     required String body,
+//     required DateTime scheduledDate,
+//     String? payload,
+//     String channelId = _generalChannelId,
+//     String channelName = 'اعلان‌های عمومی',
+//   }) async {
+//     if (kIsWeb) return;
+//     if (!_isInitialized) await initialize();
 
-    final androidDetails = _createAndroidDetails(type);
-    final iosDetails = _createIosDetails(type);
-    final notificationDetails = NotificationDetails(
-      android: androidDetails,
-      iOS: iosDetails,
-    );
+//     _notificationId++;
 
-    await _localNotifications.show(
-      _notificationId,
-      title,
-      body,
-      notificationDetails,
-      payload: payload,
-    );
-  }
+//     final tzScheduledDate = tz.TZDateTime.from(scheduledDate, tz.local);
 
-  // نمایش نوتیفیکیشن پیشرفته
-  Future<void> showAdvancedNotification({
-    required String title,
-    required String body,
-    String? payload,
-    NotificationType type = NotificationType.general,
-    String? imagePath,
-  }) async {
-    if (!_isInitialized) await initialize();
+//     final androidDetails = AndroidNotificationDetails(
+//       channelId,
+//       channelName,
+//       importance: Importance.high,
+//       priority: Priority.high,
+//     );
 
-    _notificationId++;
+//     final iosDetails = DarwinNotificationDetails();
+//     final linuxDetails = LinuxNotificationDetails();
 
-    final androidDetails = AndroidNotificationDetails(
-      _getChannelId(type),
-      _getChannelName(type),
-      channelDescription: _getChannelDescription(type),
-      importance: Importance.max,
-      priority: Priority.high,
-      playSound: true,
-      enableVibration: true,
-      color: _getColor(type),
-      largeIcon: imagePath != null ? FilePathAndroidBitmap(imagePath) : null,
-      styleInformation: imagePath != null
-          ? BigPictureStyleInformation(
-              FilePathAndroidBitmap(imagePath),
-              contentTitle: title,
-              summaryText: body,
-            )
-          : null,
-    );
+//     final notificationDetails = NotificationDetails(
+//       android: androidDetails,
+//       iOS: iosDetails,
+//       linux: linuxDetails,
+//     );
 
-    final notificationDetails = NotificationDetails(android: androidDetails);
+//     await _flutterLocalNotificationsPlugin.zonedSchedule(
+//       _notificationId,
+//       title,
+//       body,
+//       tzScheduledDate,
+//       notificationDetails,
+//       androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
+//       uiLocalNotificationDateInterpretation:
+//           UILocalNotificationDateInterpretation.absoluteTime,
+//       payload: payload,
+//     );
+//   }
 
-    await _localNotifications.show(
-      _notificationId,
-      title,
-      body,
-      notificationDetails,
-      payload: payload,
-    );
-  }
+//   Future<void> cancel(int id) async {
+//     await _flutterLocalNotificationsPlugin.cancel(id);
+//   }
 
-  // نمایش نوتیفیکیشن زمان‌بندی شده
-  Future<void> showScheduledNotification({
-    required String title,
-    required String body,
-    required Duration delay,
-    NotificationType type = NotificationType.general,
-    String? payload,
-  }) async {
-    if (!_isInitialized) await initialize();
+//   Future<void> cancelAll() async {
+//     await _flutterLocalNotificationsPlugin.cancelAll();
+//   }
 
-    _notificationId++;
-
-    final scheduledDate = _getScheduledDate(delay);
-    final androidDetails = _createAndroidDetails(type);
-    final iosDetails = _createIosDetails(type);
-    final notificationDetails = NotificationDetails(
-      android: androidDetails,
-      iOS: iosDetails,
-    );
-
-    await _localNotifications.zonedSchedule(
-      _notificationId,
-      title,
-      body,
-      scheduledDate,
-      notificationDetails,
-      androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
-      uiLocalNotificationDateInterpretation:
-          UILocalNotificationDateInterpretation.absoluteTime,
-      payload: payload,
-    );
-  }
-
-  // نمایش نوتیفیکیشن گروهی
-  Future<void> showGroupedNotification({
-    required String groupKey,
-    required List<Map<String, String>> notifications,
-  }) async {
-    if (!_isInitialized) await initialize();
-
-    for (var i = 0; i < notifications.length; i++) {
-      _notificationId++;
-
-      final androidDetails = AndroidNotificationDetails(
-        groupKey,
-        'اعلان‌های گروهی',
-        channelDescription: 'اعلان‌های گروهی',
-        importance: Importance.defaultImportance,
-        groupKey: groupKey,
-        setAsGroupSummary: i == 0,
-      );
-
-      final notificationDetails = NotificationDetails(android: androidDetails);
-
-      await _localNotifications.show(
-        _notificationId,
-        notifications[i]['title']!,
-        notifications[i]['body']!,
-        notificationDetails,
-      );
-    }
-  }
-
-  // نمایش نوتیفیکیشن با نوار پیشرفت
-  Future<void> showProgressNotification({
-    required String title,
-    required int current,
-    required int total,
-    String? payload,
-  }) async {
-    if (!_isInitialized) await initialize();
-
-    _notificationId++;
-
-    final androidDetails = AndroidNotificationDetails(
-      'progress_channel',
-      'اعلان‌های پیشرفت',
-      channelDescription: 'کانال اعلان‌های پیشرفت',
-      importance: Importance.defaultImportance,
-      showProgress: true,
-      progress: current,
-      maxProgress: total,
-      indeterminate: false,
-    );
-
-    final notificationDetails = NotificationDetails(android: androidDetails);
-
-    await _localNotifications.show(
-      _notificationId,
-      title,
-      '$current از $total',
-      notificationDetails,
-      payload: payload,
-    );
-  }
-
-  // ============== توابع کمکی ==============
-
-  AndroidNotificationDetails _createAndroidDetails(NotificationType type) {
-    return AndroidNotificationDetails(
-      _getChannelId(type),
-      _getChannelName(type),
-      channelDescription: _getChannelDescription(type),
-      importance: Importance.max,
-      priority: Priority.high,
-      playSound: true,
-      enableVibration: true,
-      color: _getColor(type),
-    );
-  }
-
-  DarwinNotificationDetails _createIosDetails(NotificationType type) {
-    return DarwinNotificationDetails(
-      presentAlert: true,
-      presentBadge: true,
-      presentSound: true,
-      subtitle: type == NotificationType.important ? 'مهم' : null,
-    );
-  }
-
-  tz.TZDateTime _getScheduledDate(Duration delay) {
-    return tz.TZDateTime.now(tz.local).add(delay);
-  }
-
-  String _getChannelId(NotificationType type) {
-    switch (type) {
-      case NotificationType.general:
-        return _generalChannelId;
-      case NotificationType.important:
-        return _importantChannelId;
-      case NotificationType.payroll:
-        return _payrollChannelId;
-    }
-  }
-
-  String _getChannelName(NotificationType type) {
-    switch (type) {
-      case NotificationType.general:
-        return _generalChannelName;
-      case NotificationType.important:
-        return _importantChannelName;
-      case NotificationType.payroll:
-        return _payrollChannelName;
-    }
-  }
-
-  String _getChannelDescription(NotificationType type) {
-    switch (type) {
-      case NotificationType.general:
-        return _generalChannelDescription;
-      case NotificationType.important:
-        return _importantChannelDescription;
-      case NotificationType.payroll:
-        return _payrollChannelDescription;
-    }
-  }
-
-  Color _getColor(NotificationType type) {
-    switch (type) {
-      case NotificationType.general:
-        return Colors.blue;
-      case NotificationType.important:
-        return Colors.red;
-      case NotificationType.payroll:
-        return Colors.green;
-    }
-  }
-
-  void _onNotificationTap(NotificationResponse response) {
-    debugPrint('نوتیفیکیشن کلیک شد: ${response.payload}');
-
-    if (response.payload != null) {
-      try {
-        final data = jsonDecode(response.payload!);
-        // اینجا می‌تونی کاربر رو به صفحه مناسب هدایت کنی
-        // NavigationService().navigateTo(data['screen']);
-      } catch (e) {
-        debugPrint('خطا در پردازش payload: $e');
-      }
-    }
-  }
-
-  // تنظیم بج - فقط برای اندروید و iOS
-  Future<void> setBadge(int count) async {
-    // فقط روی اندروید و iOS اجرا کن
-    if (PlatformService.isAndroid || PlatformService.isIOS) {
-      if (await FlutterAppBadger.isAppBadgeSupported()) {
-        if (count > 0) {
-          FlutterAppBadger.updateBadgeCount(count);
-        } else {
-          FlutterAppBadger.removeBadge();
-        }
-      }
-    } else {
-      debugPrint('❌ بج فقط روی اندروید و iOS پشتیبانی میشه');
-    }
-  }
-
-  // لغو نوتیفیکیشن
-  Future<void> cancelNotification(int id) async {
-    await _localNotifications.cancel(id);
-  }
-
-  // لغو همه نوتیفیکیشن‌ها
-  Future<void> cancelAllNotifications() async {
-    await _localNotifications.cancelAll();
-    if (await FlutterAppBadger.isAppBadgeSupported()) {
-      FlutterAppBadger.removeBadge();
-    }
-  }
-}
-
-enum NotificationType { general, important, payroll }
+//   void _onNotificationTap(String? payload) {
+//     debugPrint('نوتیفیکیشن کلیک شد: $payload');
+//     if (payload != null) {
+//       try {
+//         final data = jsonDecode(payload);
+//         debugPrint('داده‌ها: $data');
+//       } catch (e) {
+//         debugPrint('خطا: $e');
+//       }
+//     }
+//   }
+// }

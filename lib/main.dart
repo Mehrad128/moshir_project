@@ -45,11 +45,11 @@ void main() async {
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
       print('📨 پیام در foreground دریافت شد');
       
-      // نمایش نوتیفیکیشن با flutter_local_notifications
-      NotificationService().showSimpleNotification(
-        title: message.notification?.title ?? 'اعلان جدید',
-        body: message.notification?.body ?? '',
-      );
+      // // نمایش نوتیفیکیشن با flutter_local_notifications
+      // NotificationService().showSimpleNotification(
+      //   title: message.notification?.title ?? 'اعلان جدید',
+      //   body: message.notification?.body ?? '',
+      // );
     });
 
     print('✅ Firebase روی وب مقداردهی شد');

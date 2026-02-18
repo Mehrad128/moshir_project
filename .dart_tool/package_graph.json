@@ -12,6 +12,7 @@
         "firebase_messaging",
         "flutter",
         "flutter_app_badger",
+        "flutter_badge_manager",
         "flutter_biometric_auth_plus",
         "flutter_local_notifications",
         "flutter_localizations",
@@ -82,9 +83,20 @@
       ]
     },
     {
-      "name": "timezone",
-      "version": "0.9.4",
+      "name": "flutter_badge_manager",
+      "version": "0.0.3",
       "dependencies": [
+        "flutter",
+        "flutter_badge_manager_android",
+        "flutter_badge_manager_foundation",
+        "flutter_badge_manager_platform_interface"
+      ]
+    },
+    {
+      "name": "timezone",
+      "version": "0.11.0",
+      "dependencies": [
+        "http",
         "path"
       ]
     },
@@ -99,7 +111,7 @@
     },
     {
       "name": "flutter_platform_widgets",
-      "version": "9.0.0",
+      "version": "10.0.1",
       "dependencies": [
         "cupertino_icons",
         "flutter"
@@ -200,12 +212,13 @@
     },
     {
       "name": "flutter_local_notifications",
-      "version": "16.3.3",
+      "version": "21.0.0-dev.1",
       "dependencies": [
         "clock",
         "flutter",
         "flutter_local_notifications_linux",
         "flutter_local_notifications_platform_interface",
+        "flutter_local_notifications_windows",
         "timezone"
       ]
     },
@@ -405,6 +418,40 @@
       ]
     },
     {
+      "name": "flutter_badge_manager_platform_interface",
+      "version": "0.0.2",
+      "dependencies": [
+        "flutter",
+        "plugin_platform_interface"
+      ]
+    },
+    {
+      "name": "flutter_badge_manager_foundation",
+      "version": "0.0.2",
+      "dependencies": [
+        "flutter",
+        "flutter_badge_manager_platform_interface"
+      ]
+    },
+    {
+      "name": "flutter_badge_manager_android",
+      "version": "0.0.3",
+      "dependencies": [
+        "flutter",
+        "flutter_badge_manager_platform_interface"
+      ]
+    },
+    {
+      "name": "http",
+      "version": "1.6.0",
+      "dependencies": [
+        "async",
+        "http_parser",
+        "meta",
+        "web"
+      ]
+    },
+    {
       "name": "simple_gesture_detector",
       "version": "0.2.1",
       "dependencies": [
@@ -435,16 +482,6 @@
         "flutter",
         "http",
         "vector_graphics_codec"
-      ]
-    },
-    {
-      "name": "http",
-      "version": "1.6.0",
-      "dependencies": [
-        "async",
-        "http_parser",
-        "meta",
-        "web"
       ]
     },
     {
@@ -625,15 +662,26 @@
     },
     {
       "name": "flutter_local_notifications_platform_interface",
-      "version": "7.2.0",
+      "version": "11.0.0-dev.1",
       "dependencies": [
-        "flutter",
         "plugin_platform_interface"
       ]
     },
     {
+      "name": "flutter_local_notifications_windows",
+      "version": "3.0.0-dev.1",
+      "dependencies": [
+        "ffi",
+        "flutter",
+        "flutter_local_notifications_platform_interface",
+        "meta",
+        "timezone",
+        "xml"
+      ]
+    },
+    {
       "name": "flutter_local_notifications_linux",
-      "version": "4.0.1",
+      "version": "8.0.0-dev.1",
       "dependencies": [
         "dbus",
         "ffi",
@@ -800,11 +848,10 @@
       ]
     },
     {
-      "name": "path_parsing",
-      "version": "1.1.0",
+      "name": "plugin_platform_interface",
+      "version": "2.1.8",
       "dependencies": [
-        "meta",
-        "vector_math"
+        "meta"
       ]
     },
     {
@@ -818,10 +865,11 @@
       ]
     },
     {
-      "name": "plugin_platform_interface",
-      "version": "2.1.8",
+      "name": "path_parsing",
+      "version": "1.1.0",
       "dependencies": [
-        "meta"
+        "meta",
+        "vector_math"
       ]
     },
     {
