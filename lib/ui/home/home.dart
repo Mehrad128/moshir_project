@@ -63,7 +63,6 @@ class _HomePageState extends State<HomePage> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      // منوی همبرگری
                       const components.Header(),
 
                       // لوگو
