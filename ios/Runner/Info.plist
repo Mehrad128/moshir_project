@@ -2,6 +2,7 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<!-- شناسه‌های اصلی -->
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
@@ -9,7 +10,7 @@
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
-	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
+	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</key>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
@@ -22,28 +23,89 @@
 	<string>????</string>
 	<key>CFBundleVersion</key>
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
+	<key>NSFaceIDUsageDescription</key>
+	<string>این اپلیکیشن برای ورود امن از Face ID استفاده می‌کند</string>
+	
+	<!-- ============== تنظیمات نوتیفیکیشن ============== -->
+	
+	<!-- حالت‌های پس‌زمینه برای نوتیفیکیشن -->
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>fetch</string>
+		<string>remote-notification</string>
+	</array>
+	
+	<!-- درخواست مجوز نوتیفیکیشن -->
+	<key>FirebaseAppDelegateProxyEnabled</key>
+	<false/>
+	
+	<!-- توضیحات برای کاربر (مهم!) -->
+	<key>NSUserNotificationUsageDescription</key>
+	<string>برای ارسال اعلان‌های مهم حقوقی و اداری</string>
+	
+	<!-- ============== تنظیمات تشخیص چهره و اثرانگشت ============== -->
+	
+	<!-- برای Face ID -->
+	<key>NSFaceIDUsageDescription</key>
+	<string>برای ورود امن به اپلیکیشن از تشخیص چهره استفاده کنید</string>
+	
+	<!-- ============== تنظیمات دوربین و گالری ============== -->
+	
+	<!-- دسترسی به دوربین -->
+	<key>NSCameraUsageDescription</key>
+	<string>برای گرفتن عکس پروفایل و مدارک</string>
+	
+	<!-- دسترسی به گالری -->
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>برای انتخاب عکس پروفایل از گالری</string>
+	
+	<!-- ============== تنظیمات مکان ============== -->
+	
+	<!-- دسترسی به مکان (در صورت نیاز) -->
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>برای ثبت موقعیت در مأموریت‌ها</string>
+	
+	<!-- ============== تنظیمات صفحه نمایش ============== -->
+	
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	
+	<!-- صفحه راه‌انداز -->
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
+	
+	<!-- استوری‌بورد اصلی -->
 	<key>UIMainStoryboardFile</key>
 	<string>Main</string>
+	
+	<!-- جهت‌های پشتیبانی شده -->
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
-		<string>UIInterfaceOrientationLandscapeLeft</string>
-		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
+	
+	<!-- جهت‌های پشتیبانی شده برای iPad -->
 	<key>UISupportedInterfaceOrientations~ipad</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
 		<string>UIInterfaceOrientationPortraitUpsideDown</string>
-		<string>UIInterfaceOrientationLandscapeLeft</string>
-		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
+	
+	<!-- تنظیمات پیشرفته -->
 	<key>CADisableMinimumFrameDurationOnPhone</key>
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+	
+	<!-- ============== تنظیمات Font ============== -->
+	
+	<!-- اگر فونت خاصی داری اینجا اضافه کن -->
+	<!--
+	<key>UIAppFonts</key>
+	<array>
+		<string>Vazirmatn-Regular.ttf</string>
+		<string>Vazirmatn-Bold.ttf</string>
+	</array>
+	-->
 </dict>
 </plist>
