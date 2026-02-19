@@ -1,182 +1,69 @@
-name: Build Flutter APK (Debug) - Moshir UI
-
-on:
-  push:
-    branches: [ main, master, develop ]
-  pull_request:
-    branches: [ main, master ]
-  workflow_dispatch:
-
-jobs:
-  build-apk:
-    name: Build Debug APK
-    runs-on: ubuntu-latest
+- name: Fix desugaring configuration
+  working-directory: ./moshir_ui  # یا هر مسیری که پروژه هست
+  run: |
+    echo "🔧 Fixing desugaring configuration..."
     
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+    # پشتیبان گیری
+    cp android/app/build.gradle android/app/build.gradle.backup 2>/dev/null || true
+    cp android/app/build.gradle.kts android/app/build.gradle.kts.backup 2>/dev/null || true
+    
+    # بررسی نوع فایل (Groovy یا KTS)
+    if [ -f "android/app/build.gradle" ]; then
+      # برای فایل build.gradle (Groovy)
+      cat >> android/app/build.gradle << 'EOF'
+
+android {
+    defaultConfig {
+        // افزودن پشتیبانی از desugaring
+        multiDexEnabled true
+    }
+
+    compileOptions {
+        // فعال کردن desugaring
+        coreLibraryDesugaringEnabled true
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
+
+dependencies {
+    // افزودن وابستگی desugaring
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.0.4'
+}
+EOF
+      echo "✅ Updated build.gradle (Groovy)"
       
-      - name: Setup Java
-        uses: actions/setup-java@v4
-        with:
-          distribution: 'zulu'
-          java-version: '17'
-          
-      - name: Setup Flutter
-        uses: subosito/flutter-action@v2
-        with:
-          flutter-version: '3.x'
-          channel: 'stable'
-          cache: true
-      
-      - name: Check if project is in subdirectory
-        id: check-path
-        run: |
-          # بررسی می‌کنیم پروژه در کدوم مسیره
-          if [ -d "moshir_ui" ] && [ -f "moshir_ui/pubspec.yaml" ]; then
-            echo "project_path=moshir_ui" >> $GITHUB_OUTPUT
-            echo "✅ Found project in moshir_ui directory"
-          elif [ -f "pubspec.yaml" ]; then
-            echo "project_path=." >> $GITHUB_OUTPUT
-            echo "✅ Found project in root directory"
-          else
-            # جستجوی pubspec.yaml
-            PROJECT_DIR=$(find . -name "pubspec.yaml" -type f -exec dirname {} \; | head -1)
-            if [ -n "$PROJECT_DIR" ]; then
-              echo "project_path=$PROJECT_DIR" >> $GITHUB_OUTPUT
-              echo "✅ Found project in $PROJECT_DIR"
-            else
-              echo "❌ Could not find Flutter project"
-              exit 1
-            fi
-          fi
-      
-      - name: Navigate to project and cleanup
-        working-directory: ${{ steps.check-path.outputs.project_path }}
-        run: |
-          echo "📁 Current directory: $(pwd)"
-          echo "📂 Listing files:"
-          ls -la
-          
-          # پشتیبان از pubspec.yaml و پوشه lib
-          cp pubspec.yaml pubspec.yaml.backup
-          if [ -d "lib" ]; then
-            cp -r lib lib_backup
-          fi
-          if [ -d "assets" ]; then
-            cp -r assets assets_backup
-          fi
-      
-      - name: Complete regeneration of Android project
-        working-directory: ${{ steps.check-path.outputs.project_path }}
-        run: |
-          echo "🔄 Completely regenerating Android project..."
-          
-          # حذف کامل پوشه android
-          rm -rf android/
-          rm -rf .dart_tool/
-          rm -rf build/
-          
-          # گرفتن نام پروژه از pubspec.yaml
-          PROJECT_NAME=$(grep "^name:" pubspec.yaml | cut -d' ' -f2 | tr -d '\r')
-          if [ -z "$PROJECT_NAME" ]; then
-            PROJECT_NAME="moshir_ui"
-          fi
-          
-          echo "📱 Project name: $PROJECT_NAME"
-          
-          # بازسازی پروژه از صفر
-          flutter create --platforms=android --project-name=$PROJECT_NAME .
-          
-          # بازگردانی فایل‌های مهم
-          if [ -f "pubspec.yaml.backup" ]; then
-            # برگردوندن محتوای اصلی pubspec.yaml (به جز بخش android)
-            cp pubspec.yaml.backup pubspec.yaml
-            echo "✅ Restored original pubspec.yaml"
-          fi
-          
-          # بازگردانی پوشه‌ها
-          if [ -d "lib_backup" ]; then
-            rm -rf lib
-            mv lib_backup lib
-            echo "✅ Restored lib folder"
-          fi
-          
-          if [ -d "assets_backup" ]; then
-            mv assets_backup assets
-            echo "✅ Restored assets folder"
-          fi
-          
-          echo "✅ Android project regenerated successfully"
-      
-      - name: Create local.properties
-        working-directory: ${{ steps.check-path.outputs.project_path }}/android
-        run: |
-          echo "Creating local.properties..."
-          
-          # پیدا کردن مسیر Flutter SDK
-          FLUTTER_PATH=$(which flutter)
-          FLUTTER_DIR=$(realpath $(dirname $(dirname $FLUTTER_PATH)))
-          
-          echo "sdk.dir=/usr/lib/android-sdk" > local.properties
-          echo "flutter.sdk=$FLUTTER_DIR" >> local.properties
-          
-          echo "✅ local.properties created:"
-          cat local.properties
-      
-      - name: Get packages
-        working-directory: ${{ steps.check-path.outputs.project_path }}
-        run: |
-          flutter pub get
-          
-      - name: Run build_runner (if needed)
-        working-directory: ${{ steps.check-path.outputs.project_path }}
-        run: |
-          if grep -q "build_runner" pubspec.yaml; then
-            echo "🔄 Running build_runner..."
-            flutter pub run build_runner build --delete-conflicting-outputs
-          else
-            echo "⏭️ Skipping build_runner (not found)"
-          fi
-        continue-on-error: true
-        
-      - name: Build debug APK
-        working-directory: ${{ steps.check-path.outputs.project_path }}
-        run: |
-          flutter clean
-          flutter build apk --debug
-          
-      - name: List generated APK files
-        working-directory: ${{ steps.check-path.outputs.project_path }}
-        run: |
-          echo "📱 Generated APK files:"
-          find build/app/outputs/flutter-apk -name "*.apk" -type f | while read -r file; do
-            size=$(du -h "$file" | cut -f1)
-            echo "  - $(basename $file) ($size)"
-          done
-          
-      - name: Upload APK
-        uses: actions/upload-artifact@v4
-        with:
-          name: moshir-ui-debug-apk
-          path: ${{ steps.check-path.outputs.project_path }}/build/app/outputs/flutter-apk/app-debug.apk
-          if-no-files-found: error
-          retention-days: 7
-          
-      - name: Create summary
-        working-directory: ${{ steps.check-path.outputs.project_path }}
-        run: |
-          echo "## ✅ Build Successful - Moshir UI" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "### 📱 Build Information" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "- **Project:** Moshir UI" >> $GITHUB_STEP_SUMMARY
-          echo "- **Build Type:** Debug APK" >> $GITHUB_STEP_SUMMARY
-          echo "- **Flutter Version:** $(flutter --version | head -1)" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          
-          if [ -f "build/app/outputs/flutter-apk/app-debug.apk" ]; then
-            size=$(du -h "build/app/outputs/flutter-apk/app-debug.apk" | cut -f1)
-            echo "### 📥 Download APK (Size: $size)" >> $GITHUB_STEP_SUMMARY
-            echo "APK file is available as an artifact below ⬇️" >> $GITHUB_STEP_SUMMARY
-          fi
+    elif [ -f "android/app/build.gradle.kts" ]; then
+      # برای فایل build.gradle.kts (Kotlin)
+      cat >> android/app/build.gradle.kts << 'EOF'
+
+android {
+    defaultConfig {
+        // افزودن پشتیبانی از desugaring
+        multiDexEnabled = true
+    }
+
+    compileOptions {
+        // فعال کردن desugaring
+        isCoreLibraryDesugaringEnabled = true
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
+    }
+}
+
+dependencies {
+    // افزودن وابستگی desugaring
+    "coreLibraryDesugaring"("com.android.tools:desugar_jdk_libs:2.0.4")
+}
+EOF
+      echo "✅ Updated build.gradle.kts (Kotlin)"
+    fi
+    
+    echo "✅ Desugaring configuration added"
+    
+- name: Clean and rebuild
+  working-directory: ./moshir_ui
+  run: |
+    flutter clean
+    flutter pub get
+    flutter build apk --debug
