@@ -1,70 +1,120 @@
-- name: Fix desugaring configuration
-  working-directory: ./moshir_ui  # یا هر مسیری که پروژه هست
-  run: |
-    echo "🔧 Fixing desugaring configuration..."
+name: Build Flutter APK (Debug) - Moshir UI
+
+on:
+  push:
+    branches: [ main, master, develop ]
+  pull_request:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+jobs:
+  build-apk:
+    name: Build Debug APK
+    runs-on: ubuntu-latest
     
-    # پشتیبان گیری
-    cp android/app/build.gradle android/app/build.gradle.backup 2>/dev/null || true
-    cp android/app/build.gradle.kts android/app/build.gradle.kts.backup 2>/dev/null || true
-    
-    # بررسی نوع فایل (Groovy یا KTS)
-    if [ -f "android/app/build.gradle" ]; then
-      # برای فایل build.gradle (Groovy)
-      cat >> android/app/build.gradle << 'EOF'
-
-android {
-    defaultConfig {
-        // افزودن پشتیبانی از desugaring
-        multiDexEnabled true
-    }
-
-    compileOptions {
-        // فعال کردن desugaring
-        coreLibraryDesugaringEnabled true
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
-    }
-}
-
-dependencies {
-    // افزودن وابستگی desugaring
-    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.0.4'
-}
-EOF
-      echo "✅ Updated build.gradle (Groovy)"
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
       
-    elif [ -f "android/app/build.gradle.kts" ]; then
-      # برای فایل build.gradle.kts (Kotlin)
-      cat >> android/app/build.gradle.kts << 'EOF'
-
-android {
-    defaultConfig {
-        // افزودن پشتیبانی از desugaring
-        multiDexEnabled = true
-    }
-
-    compileOptions {
-        // فعال کردن desugaring
-        isCoreLibraryDesugaringEnabled = true
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
-    }
-}
-
-dependencies {
-    // افزودن وابستگی desugaring
-    "coreLibraryDesugaring"("com.android.tools:desugar_jdk_libs:2.0.4")
-}
-EOF
-      echo "✅ Updated build.gradle.kts (Kotlin)"
-    fi
-    
-    echo "✅ Desugaring configuration added"
-    
-- name: Clean and rebuild
-  working-directory: ./moshir_ui
-  run: |
-    flutter clean
-    flutter pub get
-    flutter build apk --debug
-    
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: '17'
+          
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.x'
+          channel: 'stable'
+          cache: true
+      
+      - name: Check project directory
+        id: check-path
+        run: |
+          if [ -d "moshir_ui" ] && [ -f "moshir_ui/pubspec.yaml" ]; then
+            echo "project_path=moshir_ui" >> $GITHUB_OUTPUT
+          elif [ -f "pubspec.yaml" ]; then
+            echo "project_path=." >> $GITHUB_OUTPUT
+          else
+            PROJECT_DIR=$(find . -name "pubspec.yaml" -type f -exec dirname {} \; | head -1)
+            if [ -n "$PROJECT_DIR" ]; then
+              echo "project_path=$PROJECT_DIR" >> $GITHUB_OUTPUT
+            else
+              echo "❌ Could not find Flutter project"
+              exit 1
+            fi
+          fi
+      
+      - name: Fix desugaring configuration
+        working-directory: ${{ steps.check-path.outputs.project_path }}
+        run: |
+          echo "🔧 Fixing desugaring configuration..."
+          
+          # برای build.gradle (Groovy)
+          if [ -f "android/app/build.gradle" ]; then
+            # پشتیبان گیری
+            cp android/app/build.gradle android/app/build.gradle.backup
+            
+            # بررسی وجود تنظیمات desugaring
+            if ! grep -q "coreLibraryDesugaringEnabled" android/app/build.gradle; then
+              echo "" >> android/app/build.gradle
+              echo "android {" >> android/app/build.gradle
+              echo "    compileOptions {" >> android/app/build.gradle
+              echo "        coreLibraryDesugaringEnabled true" >> android/app/build.gradle
+              echo "        sourceCompatibility JavaVersion.VERSION_1_8" >> android/app/build.gradle
+              echo "        targetCompatibility JavaVersion.VERSION_1_8" >> android/app/build.gradle
+              echo "    }" >> android/app/build.gradle
+              echo "}" >> android/app/build.gradle
+              
+              echo "" >> android/app/build.gradle
+              echo "dependencies {" >> android/app/build.gradle
+              echo "    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.0.4'" >> android/app/build.gradle
+              echo "}" >> android/app/build.gradle
+              
+              echo "✅ Desugaring configuration added to build.gradle"
+            else
+              echo "✅ Desugaring already configured"
+            fi
+          fi
+          
+          # برای build.gradle.kts (Kotlin)
+          if [ -f "android/app/build.gradle.kts" ]; then
+            cp android/app/build.gradle.kts android/app/build.gradle.kts.backup
+            
+            if ! grep -q "coreLibraryDesugaringEnabled" android/app/build.gradle.kts; then
+              echo "" >> android/app/build.gradle.kts
+              echo "android {" >> android/app/build.gradle.kts
+              echo "    compileOptions {" >> android/app/build.gradle.kts
+              echo "        isCoreLibraryDesugaringEnabled = true" >> android/app/build.gradle.kts
+              echo "        sourceCompatibility = JavaVersion.VERSION_1_8" >> android/app/build.gradle.kts
+              echo "        targetCompatibility = JavaVersion.VERSION_1_8" >> android/app/build.gradle.kts
+              echo "    }" >> android/app/build.gradle.kts
+              echo "}" >> android/app/build.gradle.kts
+              
+              echo "" >> android/app/build.gradle.kts
+              echo "dependencies {" >> android/app/build.gradle.kts
+              echo "    \"coreLibraryDesugaring\"(\"com.android.tools:desugar_jdk_libs:2.0.4\")" >> android/app/build.gradle.kts
+              echo "}" >> android/app/build.gradle.kts
+              
+              echo "✅ Desugaring configuration added to build.gradle.kts"
+            fi
+          fi
+      
+      - name: Clean and get packages
+        working-directory: ${{ steps.check-path.outputs.project_path }}
+        run: |
+          flutter clean
+          flutter pub get
+      
+      - name: Build debug APK
+        working-directory: ${{ steps.check-path.outputs.project_path }}
+        run: flutter build apk --debug
+      
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: moshir-ui-debug-apk
+          path: ${{ steps.check-path.outputs.project_path }}/build/app/outputs/flutter-apk/app-debug.apk
+          if-no-files-found: error
+          retention-days: 7
