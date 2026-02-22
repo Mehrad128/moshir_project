@@ -18,8 +18,8 @@ pluginManagement {
 
 plugins {
     id("dev.flutter.flutter-plugin-loader") version "1.0.0"
-    id("com.android.application") version "8.3.0" apply false  // نسخه پایدار
-    id("org.jetbrains.kotlin.android") version "1.9.22" apply false  // نسخه سازگار
+    id("com.android.application") version "8.7.0" apply false  // آپدیت به 8.7.0
+    id("org.jetbrains.kotlin.android") version "2.0.21" apply false  // آپدیت به 2.0.21
 }
 
 include(":app")
