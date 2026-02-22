@@ -5,8 +5,8 @@ plugins {
 }
 
 android {
-    namespace = "com.example.test1000"
-    compileSdk = 36  // تغییر به 36
+    namespace = "com.example.moshir_ui"
+    compileSdk = 36
     
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
@@ -19,9 +19,9 @@ android {
     }
 
     defaultConfig {
-        applicationId = "com.example.test1000"
+        applicationId = "com.example.moshir_ui"
         minSdk = 23
-        targetSdk = 36  // تغییر به 36
+        targetSdk = 36
         versionCode = 1
         versionName = "1.0"
     }
