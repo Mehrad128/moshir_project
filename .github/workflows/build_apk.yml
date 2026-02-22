@@ -29,70 +29,7 @@ jobs:
           channel: 'stable'
           cache: true
       
-      - name: Navigate to project and cleanup
-        working-directory: ./moshir_project
-        run: |
-          echo "📁 Current directory: $(pwd)"
-          echo "📂 Listing files:"
-          ls -la
-          
-          # پشتیبان از pubspec.yaml و پوشه lib
-          cp pubspec.yaml pubspec.yaml.backup
-          if [ -d "lib" ]; then
-            cp -r lib lib_backup
-          fi
-          if [ -d "assets" ]; then
-            cp -r assets assets_backup
-          fi
-      
-      - name: Complete regeneration of Android project
-        working-directory: ./moshir_project
-        run: |
-          echo "🔄 Completely regenerating Android project..."
-          
-          # حذف کامل پوشه android
-          rm -rf android/
-          rm -rf .dart_tool/
-          rm -rf build/
-          
-          # بازسازی پروژه از صفر
-          flutter create --platforms=android --project-name=moshir_project .
-          
-          # بازگردانی فایل‌های مهم
-          if [ -f "pubspec.yaml.backup" ]; then
-            # ادغام dependencies از فایل backup
-            grep -A 100 "dependencies:" pubspec.yaml.backup > temp_deps.txt
-            echo "✅ Dependencies backed up"
-          fi
-          
-          # بازگردانی پوشه‌ها
-          if [ -d "lib_backup" ]; then
-            rm -rf lib
-            mv lib_backup lib
-          fi
-          
-          if [ -d "assets_backup" ]; then
-            mv assets_backup assets
-          fi
-          
-          echo "✅ Android project regenerated"
-      
-      - name: Create local.properties
-        working-directory: ./moshir_project/android
-        run: |
-          echo "Creating local.properties..."
-          echo "sdk.dir=/usr/lib/android-sdk" > local.properties
-          echo "flutter.sdk=$FLUTTER_ROOT" >> local.properties
-          
-          # پیدا کردن مسیر Flutter SDK
-          FLUTTER_PATH=$(which flutter)
-          FLUTTER_DIR=$(dirname $(dirname $FLUTTER_PATH))
-          echo "flutter.sdk=$FLUTTER_DIR" >> local.properties
-          
-          echo "✅ local.properties created:"
-          cat local.properties
-      
-      - name: Get packages
+      - name: Get dependencies
         working-directory: ./moshir_project
         run: flutter pub get
         
@@ -103,7 +40,7 @@ jobs:
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: tech-blog-debug-apk
+          name: moshir-project-debug-apk
           path: moshir_project/build/app/outputs/flutter-apk/app-debug.apk
           if-no-files-found: error
           retention-days: 7
