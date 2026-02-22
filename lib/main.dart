@@ -4,8 +4,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:moshir_ui/services/firebase_service.dart';
-import 'package:moshir_ui/services/notification_service.dart';
 // import 'package:moshir_ui/services/firebase_service.dart';
 // import 'package:moshir_ui/services/platform_service.dart';
 import 'package:moshir_ui/ui/providers/settings_provider.dart';

@@ -155,6 +155,11 @@ class BiometricService {
       // ✅ اصلاح شده: بدون options اضافی
       final isAuthenticated = await _localAuth.authenticate(
         localizedReason: reason,
+        options: const AuthenticationOptions(
+          stickyAuth: true,
+          biometricOnly: false,
+        )
+        // biometricOnly: false,
       );
 
       if (isAuthenticated) {
