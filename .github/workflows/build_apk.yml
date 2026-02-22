@@ -1,59 +1,109 @@
-name: Build Flutter APK
+name: Build Flutter APK (Debug)
 
 on:
   push:
-    branches: [ main, master ]
+    branches: [ main, master, develop ]
   pull_request:
     branches: [ main, master ]
   workflow_dispatch:
 
 jobs:
-  build:
-    name: Build APK
+  build-apk:
+    name: Build Debug APK
     runs-on: ubuntu-latest
     
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
       
       - name: Setup Java
         uses: actions/setup-java@v4
         with:
           distribution: 'zulu'
           java-version: '17'
-      
+          
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
-          channel: 'stable'
           flutter-version: '3.x'
+          channel: 'stable'
           cache: true
       
-      - name: Clean project
+      - name: Navigate to project and cleanup
+        working-directory: ./moshir_project
         run: |
-          flutter clean
-          rm -rf android/.gradle
-          rm -rf ~/.gradle/caches/
-      
-      - name: Get dependencies
-        run: flutter pub get
-      
-      - name: Build APK
-        run: flutter build apk --debug
-      
-      - name: Find APK
-        run: |
-          find . -name "*.apk"
-          echo "=== Current directory contents ==="
+          echo "📁 Current directory: $(pwd)"
+          echo "📂 Listing files:"
           ls -la
-          echo "=== Build directory contents ==="
-          ls -la build/ || echo "build folder not found"
-          ls -la build/app/ || echo "app folder not found"
-          ls -la build/app/outputs/ || echo "outputs folder not found"
-          ls -la build/app/outputs/flutter-apk/ || echo "flutter-apk folder not found"
+          
+          # پشتیبان از pubspec.yaml و پوشه lib
+          cp pubspec.yaml pubspec.yaml.backup
+          if [ -d "lib" ]; then
+            cp -r lib lib_backup
+          fi
+          if [ -d "assets" ]; then
+            cp -r assets assets_backup
+          fi
       
+      - name: Complete regeneration of Android project
+        working-directory: ./moshir_project
+        run: |
+          echo "🔄 Completely regenerating Android project..."
+          
+          # حذف کامل پوشه android
+          rm -rf android/
+          rm -rf .dart_tool/
+          rm -rf build/
+          
+          # بازسازی پروژه از صفر
+          flutter create --platforms=android --project-name=moshir_project .
+          
+          # بازگردانی فایل‌های مهم
+          if [ -f "pubspec.yaml.backup" ]; then
+            # ادغام dependencies از فایل backup
+            grep -A 100 "dependencies:" pubspec.yaml.backup > temp_deps.txt
+            echo "✅ Dependencies backed up"
+          fi
+          
+          # بازگردانی پوشه‌ها
+          if [ -d "lib_backup" ]; then
+            rm -rf lib
+            mv lib_backup lib
+          fi
+          
+          if [ -d "assets_backup" ]; then
+            mv assets_backup assets
+          fi
+          
+          echo "✅ Android project regenerated"
+      
+      - name: Create local.properties
+        working-directory: ./moshir_project/android
+        run: |
+          echo "Creating local.properties..."
+          echo "sdk.dir=/usr/lib/android-sdk" > local.properties
+          echo "flutter.sdk=$FLUTTER_ROOT" >> local.properties
+          
+          # پیدا کردن مسیر Flutter SDK
+          FLUTTER_PATH=$(which flutter)
+          FLUTTER_DIR=$(dirname $(dirname $FLUTTER_PATH))
+          echo "flutter.sdk=$FLUTTER_DIR" >> local.properties
+          
+          echo "✅ local.properties created:"
+          cat local.properties
+      
+      - name: Get packages
+        working-directory: ./moshir_project
+        run: flutter pub get
+        
+      - name: Build debug APK
+        working-directory: ./moshir_project
+        run: flutter build apk --debug
+        
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: app-debug
-          path: build/app/outputs/flutter-apk/app-debug.apk
-          retention-days: 30
+          name: tech-blog-debug-apk
+          path: moshir_project/build/app/outputs/flutter-apk/app-debug.apk
+          if-no-files-found: error
+          retention-days: 7
