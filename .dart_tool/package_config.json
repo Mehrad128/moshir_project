@@ -189,7 +189,7 @@
     },
     {
       "name": "flutter_local_notifications",
-      "rootUri": "file:///home/voidcipher/.pub-cache/hosted/pub.flutter-io.cn/flutter_local_notifications-21.0.0-dev.1",
+      "rootUri": "file:///home/voidcipher/.pub-cache/hosted/pub.flutter-io.cn/flutter_local_notifications-21.0.0-dev.2",
       "packageUri": "lib/",
       "languageVersion": "3.10"
     },
@@ -321,7 +321,7 @@
     },
     {
       "name": "json_annotation",
-      "rootUri": "file:///home/voidcipher/.pub-cache/hosted/pub.flutter-io.cn/json_annotation-4.10.0",
+      "rootUri": "file:///home/voidcipher/.pub-cache/hosted/pub.flutter-io.cn/json_annotation-4.11.0",
       "packageUri": "lib/",
       "languageVersion": "3.9"
     },
@@ -351,21 +351,21 @@
     },
     {
       "name": "local_auth",
-      "rootUri": "file:///home/voidcipher/.pub-cache/hosted/pub.flutter-io.cn/local_auth-3.0.0",
+      "rootUri": "file:///home/voidcipher/.pub-cache/hosted/pub.flutter-io.cn/local_auth-2.3.0",
       "packageUri": "lib/",
-      "languageVersion": "3.9"
+      "languageVersion": "3.2"
     },
     {
       "name": "local_auth_android",
-      "rootUri": "file:///home/voidcipher/.pub-cache/hosted/pub.flutter-io.cn/local_auth_android-2.0.4",
+      "rootUri": "file:///home/voidcipher/.pub-cache/hosted/pub.flutter-io.cn/local_auth_android-1.0.56",
       "packageUri": "lib/",
       "languageVersion": "3.9"
     },
     {
       "name": "local_auth_darwin",
-      "rootUri": "file:///home/voidcipher/.pub-cache/hosted/pub.flutter-io.cn/local_auth_darwin-2.0.2",
+      "rootUri": "file:///home/voidcipher/.pub-cache/hosted/pub.flutter-io.cn/local_auth_darwin-1.6.1",
       "packageUri": "lib/",
-      "languageVersion": "3.10"
+      "languageVersion": "3.9"
     },
     {
       "name": "local_auth_platform_interface",
@@ -375,9 +375,9 @@
     },
     {
       "name": "local_auth_windows",
-      "rootUri": "file:///home/voidcipher/.pub-cache/hosted/pub.flutter-io.cn/local_auth_windows-2.0.1",
+      "rootUri": "file:///home/voidcipher/.pub-cache/hosted/pub.flutter-io.cn/local_auth_windows-1.0.11",
       "packageUri": "lib/",
-      "languageVersion": "3.8"
+      "languageVersion": "3.2"
     },
     {
       "name": "logger",
@@ -495,7 +495,7 @@
     },
     {
       "name": "posix",
-      "rootUri": "file:///home/voidcipher/.pub-cache/hosted/pub.flutter-io.cn/posix-6.0.3",
+      "rootUri": "file:///home/voidcipher/.pub-cache/hosted/pub.flutter-io.cn/posix-6.5.0",
       "packageUri": "lib/",
       "languageVersion": "3.0"
     },
@@ -639,7 +639,7 @@
     },
     {
       "name": "vector_graphics_compiler",
-      "rootUri": "file:///home/voidcipher/.pub-cache/hosted/pub.flutter-io.cn/vector_graphics_compiler-1.1.20",
+      "rootUri": "file:///home/voidcipher/.pub-cache/hosted/pub.flutter-io.cn/vector_graphics_compiler-1.2.0",
       "packageUri": "lib/",
       "languageVersion": "3.9"
     },
