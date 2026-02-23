@@ -29,28 +29,21 @@ jobs:
           channel: 'stable'
           cache: true
       
-      - name: Check directory structure
+      - name: Debug - Show current directory
         run: |
-          echo "Current directory: $(pwd)"
-          echo "Listing files:"
+          pwd
           ls -la
-          echo "Looking for moshir_project folder:"
-          find . -name "moshir_project" -type d
       
       - name: Get dependencies
-        run: |
-          cd moshir_project
-          flutter pub get
+        run: flutter pub get
         
       - name: Build debug APK
-        run: |
-          cd moshir_project
-          flutter build apk --debug
+        run: flutter build apk --debug
         
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
           name: moshir-project-debug-apk
-          path: moshir_project/build/app/outputs/flutter-apk/app-debug.apk
+          path: build/app/outputs/flutter-apk/app-debug.apk
           if-no-files-found: error
           retention-days: 7
