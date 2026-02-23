@@ -33,12 +33,13 @@ jobs:
         run: flutter pub get
         
       - name: Build debug APK
-        run: flutter build apk --debug
+        run: |
+          mkdir -p build/app/outputs/flutter-apk
+          flutter build apk --debug --output=build/app/outputs/flutter-apk/app-debug.apk
                 
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
           name: moshir-project-debug-apk
-          path: build/**/*.apk
-          if-no-files-found: warn
-          retention-days: 7
+          path: build/app/outputs/flutter-apk/app-debug.apk
+          if-no-files-found: error
