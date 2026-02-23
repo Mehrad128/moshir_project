@@ -29,13 +29,23 @@ jobs:
           channel: 'stable'
           cache: true
       
+      - name: Check directory structure
+        run: |
+          echo "Current directory: $(pwd)"
+          echo "Listing files:"
+          ls -la
+          echo "Looking for moshir_project folder:"
+          find . -name "moshir_project" -type d
+      
       - name: Get dependencies
-        working-directory: ./moshir_project
-        run: flutter pub get
+        run: |
+          cd moshir_project
+          flutter pub get
         
       - name: Build debug APK
-        working-directory: ./moshir_project
-        run: flutter build apk --debug
+        run: |
+          cd moshir_project
+          flutter build apk --debug
         
       - name: Upload APK
         uses: actions/upload-artifact@v4
