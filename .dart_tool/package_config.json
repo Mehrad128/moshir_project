@@ -26,6 +26,12 @@
       "languageVersion": "3.4"
     },
     {
+      "name": "awesome_notifications",
+      "rootUri": "file:///home/voidcipher/.pub-cache/hosted/pub.flutter-io.cn/awesome_notifications-0.11.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.19"
+    },
+    {
       "name": "boolean_selector",
       "rootUri": "file:///home/voidcipher/.pub-cache/hosted/pub.flutter-io.cn/boolean_selector-2.1.2",
       "packageUri": "lib/",
@@ -78,12 +84,6 @@
       "rootUri": "file:///home/voidcipher/.pub-cache/hosted/pub.flutter-io.cn/cupertino_icons-1.0.8",
       "packageUri": "lib/",
       "languageVersion": "3.1"
-    },
-    {
-      "name": "dbus",
-      "rootUri": "file:///home/voidcipher/.pub-cache/hosted/pub.flutter-io.cn/dbus-0.7.12",
-      "packageUri": "lib/",
-      "languageVersion": "2.17"
     },
     {
       "name": "fake_async",
@@ -186,30 +186,6 @@
       "rootUri": "file:///home/voidcipher/.pub-cache/hosted/pub.flutter-io.cn/flutter_lints-6.0.0",
       "packageUri": "lib/",
       "languageVersion": "3.8"
-    },
-    {
-      "name": "flutter_local_notifications",
-      "rootUri": "file:///home/voidcipher/.pub-cache/hosted/pub.flutter-io.cn/flutter_local_notifications-21.0.0-dev.2",
-      "packageUri": "lib/",
-      "languageVersion": "3.10"
-    },
-    {
-      "name": "flutter_local_notifications_linux",
-      "rootUri": "file:///home/voidcipher/.pub-cache/hosted/pub.flutter-io.cn/flutter_local_notifications_linux-8.0.0-dev.1",
-      "packageUri": "lib/",
-      "languageVersion": "3.10"
-    },
-    {
-      "name": "flutter_local_notifications_platform_interface",
-      "rootUri": "file:///home/voidcipher/.pub-cache/hosted/pub.flutter-io.cn/flutter_local_notifications_platform_interface-11.0.0-dev.1",
-      "packageUri": "lib/",
-      "languageVersion": "3.10"
-    },
-    {
-      "name": "flutter_local_notifications_windows",
-      "rootUri": "file:///home/voidcipher/.pub-cache/hosted/pub.flutter-io.cn/flutter_local_notifications_windows-3.0.0-dev.1",
-      "packageUri": "lib/",
-      "languageVersion": "3.10"
     },
     {
       "name": "flutter_localizations",
