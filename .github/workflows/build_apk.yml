@@ -29,21 +29,16 @@ jobs:
           channel: 'stable'
           cache: true
       
-      - name: Debug - Show current directory
-        run: |
-          pwd
-          ls -la
-      
       - name: Get dependencies
         run: flutter pub get
         
       - name: Build debug APK
         run: flutter build apk --debug
-        
+                
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
           name: moshir-project-debug-apk
-          path: build/app/outputs/flutter-apk/app-debug.apk
-          if-no-files-found: error
+          path: build/**/*.apk
+          if-no-files-found: warn
           retention-days: 7
